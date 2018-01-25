@@ -7,6 +7,7 @@
 #include "Text.h"
 #include "C2DShader.h"
 #include "Square.h"
+#include "GrayScale.h"
 
 ALIGN16 class Scene
 {
@@ -21,7 +22,12 @@ private:
 	int mWidth;
 	int mHeight;
 
-	std::unique_ptr<Square> mChrissy;
+	std::unique_ptr<CTexture> mChrissy;
+
+	std::unique_ptr<GrayScale> mGrayScaleFilter;
+
+	std::unique_ptr<Square> mBefore;
+	std::unique_ptr<Square> mAfter;
 
 	std::shared_ptr<CInput> mInput;
 	std::shared_ptr<C2DShader> m2DShader;
@@ -50,6 +56,7 @@ private:
 	void InitD3D( bool bFullscreen );
 	void InitShaders( );
 	void Init2D( );
+	void InitFilters( );
 private:
 	void EnableBackbuffer( );
 	void Update( );

@@ -11,6 +11,7 @@ Scene::Scene( HINSTANCE Instance, bool bFullscreen ) :
 		InitD3D( bFullscreen );
 		InitShaders( );
 		Init2D( );
+		InitFilters( );
 	}
 	CATCH;
 }
@@ -174,14 +175,30 @@ void Scene::Init2D( )
 	m32OpenSans = std::make_shared<CFont>( mDevice.Get( ), mImmediateContext.Get( ),
 		( LPWSTR ) L"Data/32OpenSans.fnt" );
 	
-	mChrissy = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ), m2DShader,
-		mWidth, mHeight, mWidth, mHeight,
-		( LPWSTR ) L"Data/Stock/ChrissyConstanza.jpg" );
+	mChrissy = std::make_unique<CTexture>(
+		( LPWSTR ) L"Data/Stock/SnowImage.jpg",
+		mDevice.Get( )
+		);
+
+	mBefore = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
+		m2DShader, mWidth, mHeight, mWidth / 2, mHeight );
+	mBefore->TranslateTo( 0.0f, 0.0f );
+	mAfter = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
+		m2DShader, mWidth, mHeight, mWidth / 2, mHeight );
+	mAfter->TranslateTo( mWidth / 2.0f, 0 );
 
 #if DEBUG || _DEBUG
 	mDebugText = std::make_unique<CText>( mDevice.Get( ), mImmediateContext.Get( ),
 		m2DShader, m32OpenSans, mWidth, mHeight );
 #endif
+}
+
+void Scene::InitFilters( )
+{
+	mGrayScaleFilter = std::make_unique<GrayScale>( mDevice, mImmediateContext, mChrissy->GetTexture( ) );
+
+	mBefore->SetTexture( mChrissy->GetTexture( ) );
+	mAfter->SetTexture( mGrayScaleFilter->GetTexture( ) );
 }
 
 LRESULT Scene::WndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
@@ -237,6 +254,8 @@ void Scene::Update( )
 	mInput->Frame( );
 	float frameTime = mTimer.GetFrameTime( );
 
+	mGrayScaleFilter->Apply( mChrissy->GetTexture( ) );
+
 #if DEBUG || _DEBUG
 	frameTime = 1.f / 60.f;
 #endif
@@ -256,7 +275,8 @@ void Scene::Render( )
 	EnableBackbuffer( );
 	mImmediateContext->ClearRenderTargetView( mBackbuffer.Get( ), BackColor );
 
-	mChrissy->Render( mOrthoMatrix );
+	mBefore->Render( mOrthoMatrix );
+	mAfter->Render( mOrthoMatrix );
 
 
 #if DEBUG || _DEBUG

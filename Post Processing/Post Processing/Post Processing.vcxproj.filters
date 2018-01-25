@@ -17,12 +17,21 @@
       <UniqueIdentifier>{a96f5e56-a76f-4134-8174-3cd8f9f3e09d}</UniqueIdentifier>
       <Extensions>hlsl;</Extensions>
     </Filter>
+    <Filter Include="Header Files\Filters">
+      <UniqueIdentifier>{108d2e5e-b003-40f1-8c2a-d7b2a6bfc497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Filters">
+      <UniqueIdentifier>{8606e038-8d2c-4bb5-854e-2c88b78ee7f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="2DPixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="2DVertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="GrayScaleComputeShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>
@@ -57,6 +66,9 @@
     <ClCompile Include="winmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GrayScale.cpp">
+      <Filter>Source Files\Filters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C2DShader.h">
@@ -88,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GrayScale.h">
+      <Filter>Header Files\Filters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -104,7 +104,7 @@ namespace DX
 	static constexpr const float CamNear = 0.1f;
 	static constexpr const float CamFar = 100.0f;
 	extern MicrosoftPointer( ID3D11RasterizerState ) NoCulling;
-	extern MicrosoftPointer( ID3D11BlendState ) InverseBlending;
+	extern MicrosoftPointer( ID3D11SamplerState ) LinearWrapSampler;
 	template <class type>
 	inline void Max( unsigned int count, ... )
 	{

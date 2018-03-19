@@ -176,7 +176,7 @@ void Scene::Init2D( )
 		( LPWSTR ) L"Data/32OpenSans.fnt" );
 	
 	mChrissy = std::make_unique<CTexture>(
-		( LPWSTR ) L"Data/Stock/SnowImage.jpg",
+		( LPWSTR ) L"Data/Stock/Chrissy.jpg",
 		mDevice.Get( )
 		);
 
@@ -188,6 +188,8 @@ void Scene::Init2D( )
 	mAfter->TranslateTo( mWidth / 2.0f, 0 );
 
 #if DEBUG || _DEBUG
+	mFPSText = std::make_unique<CText>(mDevice.Get(), mImmediateContext.Get(),
+		m2DShader, m32OpenSans, mWidth, mHeight);
 	mDebugText = std::make_unique<CText>( mDevice.Get( ), mImmediateContext.Get( ),
 		m2DShader, m32OpenSans, mWidth, mHeight );
 #endif
@@ -195,10 +197,21 @@ void Scene::Init2D( )
 
 void Scene::InitFilters( )
 {
-	mGrayScaleFilter = std::make_unique<GrayScale>( mDevice, mImmediateContext, mChrissy->GetTexture( ) );
+	mGrayScaleFilter = std::make_unique<GrayScale>(mDevice, mImmediateContext, mChrissy->GetTexture());
+	mDitheringFilter = std::make_unique<Dithering>(mDevice, mImmediateContext, mChrissy->GetTexture());
+	Dithering::SPaletteInfo palette;
+	palette.Colors[0] = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+	palette.Colors[1] = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	palette.Colors[2] = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+	palette.Colors[3] = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+	palette.Colors[4] = DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
+	palette.Colors[5] = DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+	palette.Colors[6] = DirectX::XMFLOAT4(0.71f, 0.62f, 0.57f, 1.0f);
+	palette.numColors = 7;
+	mDitheringFilter->SetPaletteInfo(palette);
 
 	mBefore->SetTexture( mChrissy->GetTexture( ) );
-	mAfter->SetTexture( mGrayScaleFilter->GetTexture( ) );
+	mAfter->SetTexture( mDitheringFilter->GetTexture( ) );
 }
 
 LRESULT Scene::WndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
@@ -254,7 +267,7 @@ void Scene::Update( )
 	mInput->Frame( );
 	float frameTime = mTimer.GetFrameTime( );
 
-	mGrayScaleFilter->Apply( mChrissy->GetTexture( ) );
+	mDitheringFilter->Apply( mChrissy->GetTexture( ) );
 
 #if DEBUG || _DEBUG
 	frameTime = 1.f / 60.f;
@@ -281,6 +294,9 @@ void Scene::Render( )
 
 #if DEBUG || _DEBUG
 	char buffer[ 256 ];
+	sprintf_s(buffer, "FPS: %d", mTimer.GetFPS());
+	mFPSText->Render(mOrthoMatrix, buffer, 0, 0,
+		DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f));
 	sprintf_s( buffer, "DEBUG MODE" );
 	mDebugText->Render( mOrthoMatrix, buffer, 0, 35,
 		DirectX::XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ) );

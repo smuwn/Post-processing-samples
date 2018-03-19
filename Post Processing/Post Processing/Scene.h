@@ -8,6 +8,7 @@
 #include "C2DShader.h"
 #include "Square.h"
 #include "GrayScale.h"
+#include "Dithering.h"
 
 ALIGN16 class Scene
 {
@@ -25,6 +26,7 @@ private:
 	std::unique_ptr<CTexture> mChrissy;
 
 	std::unique_ptr<GrayScale> mGrayScaleFilter;
+	std::unique_ptr<Dithering> mDitheringFilter;
 
 	std::unique_ptr<Square> mBefore;
 	std::unique_ptr<Square> mAfter;
@@ -35,6 +37,7 @@ private:
 	std::shared_ptr<CFont> m32OpenSans;
 
 #if DEBUG || _DEBUG
+	std::unique_ptr<CText> mFPSText;
 	std::unique_ptr<CText> mDebugText;
 #endif
 

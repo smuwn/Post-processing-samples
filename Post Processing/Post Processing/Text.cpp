@@ -98,7 +98,7 @@ void CText::Render( DirectX::FXMMATRIX& Matrix, DirectX::XMFLOAT4& Color )
 	mContext->IASetVertexBuffers( 0, 1, mVertexBuffer.GetAddressOf( ), &Stride, &Offset );
 	mContext->IASetIndexBuffer( mIndexBuffer.Get( ), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0 );
 	mContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	mShader->Render( mIndexCount, DirectX::XMMatrixIdentity( ), Matrix, mFont->GetTexture( ), Color );
+	mShader->Render( mIndexCount, DirectX::XMMatrixIdentity( ), Matrix, mFont->GetTextureSRV( ), Color );
 
 	// Old toys
 	mContext->IASetVertexBuffers( 0, 1, &oldVertexBuffer, &oldStride, &oldOffset );

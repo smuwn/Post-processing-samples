@@ -2,6 +2,7 @@
 
 #include "commonincludes.h"
 #include "ShaderHelper.h"
+#include "TextureUtilities.h"
 
 
 class Filter
@@ -19,7 +20,7 @@ public:
 	virtual void CreateTexture(ID3D11ShaderResourceView * SRV);
 
 public:
-	inline ID3D11ShaderResourceView* GetTexture() { return mTextureSRV.Get(); };
+	inline ID3D11ShaderResourceView* GetTextureSRV() { return mTextureSRV.Get(); };
 protected:
 	MicrosoftPointer(ID3D11ComputeShader) mComputeShader;
 	MicrosoftPointer(ID3DBlob) mComputeShaderBlob;

@@ -170,7 +170,7 @@ void CFont::ReadFile( LPWSTR Path )
 	ifFile >> temp; // file
 	startpos = temp.find( L"\"" ) + 1;
 	temp = temp.substr( startpos, temp.size( ) - startpos - 1 );
-	mFPSTexture = std::make_unique<CTexture>( ( LPWSTR ) temp.c_str( ), mDevice );
+	mFPSTexture = std::make_unique<CTexture>( ( LPWSTR ) temp.c_str( ), mDevice, mContext );
 
 	int characterCount;
 	ifFile >> temp >> temp;

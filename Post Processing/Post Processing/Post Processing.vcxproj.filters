@@ -23,6 +23,18 @@
     <Filter Include="Source Files\Filters">
       <UniqueIdentifier>{8606e038-8d2c-4bb5-854e-2c88b78ee7f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{a902733f-9d18-4cf1-87ec-5432fb5dca11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{7a048a37-08d3-4d2e-8536-6e5ef1430f7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interfaces">
+      <UniqueIdentifier>{4a3d8239-4d79-4a0c-843c-ecbf5328c497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Interfaces">
+      <UniqueIdentifier>{daa3679b-beb5-44b0-999c-9bf4dfb753e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="2DPixelShader.hlsl">
@@ -40,9 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C2DShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="commonincludes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
@@ -75,15 +84,18 @@
     <ClCompile Include="Dithering.cpp">
       <Filter>Source Files\Filters</Filter>
     </ClCompile>
+    <ClCompile Include="WICTextureLoader.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
     <ClCompile Include="Filter.cpp">
-      <Filter>Source Files\Filters</Filter>
+      <Filter>Source Files\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="commonincludes.cpp">
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C2DShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="commonincludes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
@@ -96,9 +108,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Square.h">
@@ -116,8 +125,20 @@
     <ClInclude Include="Dithering.h">
       <Filter>Header Files\Filters</Filter>
     </ClInclude>
+    <ClInclude Include="WICTextureLoader.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="Filter.h">
-      <Filter>Header Files\Filters</Filter>
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="commonincludes.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderHelper.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUtilities.h">
+      <Filter>Header Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

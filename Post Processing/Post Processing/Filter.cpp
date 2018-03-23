@@ -54,15 +54,6 @@ void Filter::CreateTexture(ID3D11ShaderResourceView * SRV)
 	texDesc.SampleDesc = mTextureDesc.SampleDesc;
 	texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 	ThrowIfFailed(mDevice->CreateTexture2D(&texDesc, nullptr, &mTexture));
-	ZeroMemoryAndDeclare(D3D11_SHADER_RESOURCE_VIEW_DESC, srvDesc);
-	srvDesc.Texture2D.MipLevels = 1;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Format = texDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
-	ThrowIfFailed(mDevice->CreateShaderResourceView(mTexture.Get(), &srvDesc, &mTextureSRV));
-	ZeroMemoryAndDeclare(D3D11_UNORDERED_ACCESS_VIEW_DESC, uavDesc);
-	uavDesc.Texture2D.MipSlice = 0;
-	uavDesc.Format = texDesc.Format;
-	uavDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
-	ThrowIfFailed(mDevice->CreateUnorderedAccessView(mTexture.Get(), &uavDesc, &mTextureUAV));
+	TextureUtilities::CreateSRVFromTexture(mDevice.Get(), mTexture.Get(), &mTextureSRV);
+	TextureUtilities::CreateUAVFromTexture(mDevice.Get(), mTexture.Get(), &mTextureUAV);
 }

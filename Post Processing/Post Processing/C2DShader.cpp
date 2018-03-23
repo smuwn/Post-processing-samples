@@ -125,7 +125,7 @@ void C2DShader::Render( UINT IndexCount, DirectX::FXMMATRIX& World, DirectX::FXM
 
 	if ( !( Texture == nullptr || Texture == 0 ) )
 	{
-		ID3D11ShaderResourceView* SRV = Texture->GetTexture( );
+		ID3D11ShaderResourceView* SRV = Texture->GetTextureSRV( );
 		mContext->PSSetShaderResources( 0, 1, &SRV );
 	}
 

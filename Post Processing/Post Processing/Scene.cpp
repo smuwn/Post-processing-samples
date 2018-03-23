@@ -54,11 +54,11 @@ void Scene::InitWindow( bool bFullscreen )
 		mWidth = GetSystemMetrics( SM_CXSCREEN );
 		mHeight = GetSystemMetrics( SM_CYSCREEN );
 	}
-
-	mWindow = CreateWindow( ENGINE_NAME, ENGINE_NAME,
+	
+	mWindow = CreateWindow(ENGINE_NAME, ENGINE_NAME,
 		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, mWidth, mHeight,
-		nullptr, nullptr, mInstance, nullptr );
-	if ( !mWidth )
+		nullptr, nullptr, mInstance, nullptr);
+	if ( !mWindow )
 		throw std::exception( "Couldn't create window" );
 
 	UpdateWindow( mWindow );
@@ -176,16 +176,17 @@ void Scene::Init2D( )
 		( LPWSTR ) L"Data/32OpenSans.fnt" );
 	
 	mChrissy = std::make_unique<CTexture>(
-		( LPWSTR ) L"Data/Stock/Chrissy.jpg",
-		mDevice.Get( )
+		(LPWSTR)L"Data/Stock/Chrissy.jpg",
+		mDevice.Get(), mImmediateContext.Get(),
+		true
 		);
 
 	mBefore = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
-		m2DShader, mWidth, mHeight, mWidth / 2, mHeight );
+		m2DShader, mWidth, mHeight, mWidth, mHeight );
 	mBefore->TranslateTo( 0.0f, 0.0f );
-	mAfter = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
-		m2DShader, mWidth, mHeight, mWidth / 2, mHeight );
-	mAfter->TranslateTo( mWidth / 2.0f, 0 );
+	//mAfter = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
+	//	m2DShader, mWidth, mHeight, mWidth / 2, mHeight );
+	//mAfter->TranslateTo( mWidth / 2.0f, 0 );
 
 #if DEBUG || _DEBUG
 	mFPSText = std::make_unique<CText>(mDevice.Get(), mImmediateContext.Get(),
@@ -197,8 +198,8 @@ void Scene::Init2D( )
 
 void Scene::InitFilters( )
 {
-	mGrayScaleFilter = std::make_unique<GrayScale>(mDevice, mImmediateContext, mChrissy->GetTexture());
-	mDitheringFilter = std::make_unique<Dithering>(mDevice, mImmediateContext, mChrissy->GetTexture());
+	mGrayScaleFilter = std::make_unique<GrayScale>(mDevice, mImmediateContext, mChrissy->GetTextureSRV());
+	mDitheringFilter = std::make_unique<Dithering>(mDevice, mImmediateContext, mChrissy->GetTextureSRV());
 	Dithering::SPaletteInfo palette;
 	palette.Colors[0] = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 	palette.Colors[1] = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
@@ -210,8 +211,8 @@ void Scene::InitFilters( )
 	palette.numColors = 7;
 	mDitheringFilter->SetPaletteInfo(palette);
 
-	mBefore->SetTexture( mChrissy->GetTexture( ) );
-	mAfter->SetTexture( mDitheringFilter->GetTexture( ) );
+	mBefore->SetTexture( mChrissy->GetTextureSRV( ) );
+	//mAfter->SetTexture( mDitheringFilter->GetTextureSRV( ) );
 }
 
 LRESULT Scene::WndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
@@ -267,7 +268,7 @@ void Scene::Update( )
 	mInput->Frame( );
 	float frameTime = mTimer.GetFrameTime( );
 
-	mDitheringFilter->Apply( mChrissy->GetTexture( ) );
+	//mDitheringFilter->Apply( mChrissy->GetTextureSRV( ) );
 
 #if DEBUG || _DEBUG
 	frameTime = 1.f / 60.f;
@@ -289,7 +290,7 @@ void Scene::Render( )
 	mImmediateContext->ClearRenderTargetView( mBackbuffer.Get( ), BackColor );
 
 	mBefore->Render( mOrthoMatrix );
-	mAfter->Render( mOrthoMatrix );
+	//mAfter->Render( mOrthoMatrix );
 
 
 #if DEBUG || _DEBUG

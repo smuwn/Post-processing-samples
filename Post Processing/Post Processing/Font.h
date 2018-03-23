@@ -48,7 +48,7 @@ public:
 	CFont( ID3D11Device * Device, ID3D11DeviceContext * Context, LPWSTR lpPath  );
 	~CFont( );
 public:
-	CTexture * GetTexture( ) { return mFPSTexture.get( ); };
+	CTexture * GetTextureSRV( ) { return mFPSTexture.get( ); };
 	void Build( void* Vertices, void* Indices,
 		UINT& VertexCount, UINT& IndexCount,
 		LPCSTR Message, float x, float y );

@@ -21,7 +21,7 @@ Square::Square( ID3D11Device * device, ID3D11DeviceContext * context,
 		CreateBuffers( );
 		mWorld = DirectX::XMMatrixIdentity( );
 		if ( Path != L"" )
-			mTexture = std::make_unique<CTexture>( Path, mDevice );
+			mTexture = std::make_unique<CTexture>( Path, mDevice, mContext );
 	}
 	CATCH;
 }

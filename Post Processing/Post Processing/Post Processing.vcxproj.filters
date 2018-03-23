@@ -49,6 +49,12 @@
     <FxCompile Include="DitheringComputeShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="BrushHoverComputeShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="BrushActionComputeShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C2DShader.cpp">
@@ -92,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="commonincludes.cpp">
       <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Brush.cpp">
+      <Filter>Source Files\Filters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +149,15 @@
     <ClInclude Include="TextureUtilities.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="Brush.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ColorConversions.hlsli">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Brush.hlsli">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

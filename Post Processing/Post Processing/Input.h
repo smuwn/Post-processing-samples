@@ -64,5 +64,13 @@ public:
 		return m_currentMouseState.rgbButtons[ 0 ] & 0x80 && // if the key was pressed this frame
 			!( m_lastMouseState.rgbButtons[ 0 ] & 0x80 ); // and it was not pressed in the previous frame
 	}
+	UINT GetCursorX()
+	{
+		return m_cursorX;
+	}
+	UINT GetCursorY()
+	{
+		return m_cursorY;
+	}
 };
 

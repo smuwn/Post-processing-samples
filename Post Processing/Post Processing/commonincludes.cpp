@@ -4,6 +4,7 @@ namespace DX
 {
 	MicrosoftPointer( ID3D11RasterizerState ) NoCulling;
 	MicrosoftPointer( ID3D11SamplerState ) LinearWrapSampler;
+	MicrosoftPointer(ID3D11SamplerState) LinearClampSampler;
 	void InitializeStates( ID3D11Device * device )
 	{
 
@@ -21,6 +22,9 @@ namespace DX
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		sampDesc.MipLODBias = 0;
 		ThrowIfFailed( device->CreateSamplerState( &sampDesc, &LinearWrapSampler ) );
-
+		sampDesc.AddressU =
+			sampDesc.AddressV =
+			sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP;
+		ThrowIfFailed(device->CreateSamplerState(&sampDesc, &LinearClampSampler ));
 	}
 }

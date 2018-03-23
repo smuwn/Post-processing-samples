@@ -21,6 +21,7 @@ CTexture::CTexture(LPWSTR lpPath, ID3D11Device * device, ID3D11DeviceContext * c
 				D3D11_BIND_FLAG::D3D11_BIND_UNORDERED_ACCESS)
 			 );
 		CreateUAV();
+		mHasUAV = true;
 	}
 	else
 	{

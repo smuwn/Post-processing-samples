@@ -19,7 +19,6 @@ Scene::Scene( HINSTANCE Instance, bool bFullscreen ) :
 
 Scene::~Scene( )
 {
-
 	mDevice.Reset( );
 	mImmediateContext.Reset( );
 	mBackbuffer.Reset( );
@@ -75,7 +74,7 @@ void Scene::InitWindow( bool bFullscreen )
 		nullptr, nullptr, mInstance, nullptr);
 	if ( !mWindow )
 		throw std::exception( "Couldn't create window" );
-
+		
 	UpdateWindow( mWindow );
 	ShowWindow( mWindow, SW_SHOWNORMAL );
 	SetFocus( mWindow );
@@ -196,12 +195,9 @@ void Scene::Init2D( )
 		true
 		);
 
-	mBefore = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
+	mAfter = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
 		m2DShader, mWidth, mHeight, mWidth, mHeight );
-	mBefore->TranslateTo( 0.0f, 0.0f );
-	//mAfter = std::make_unique<Square>( mDevice.Get( ), mImmediateContext.Get( ),
-	//	m2DShader, mWidth, mHeight, mWidth / 2, mHeight );
-	//mAfter->TranslateTo( mWidth / 2.0f, 0 );
+	mAfter->TranslateTo( 0, 0 );
 
 #if DEBUG || _DEBUG
 	mFPSText = std::make_unique<CText>(mDevice.Get(), mImmediateContext.Get(),
@@ -225,9 +221,15 @@ void Scene::InitFilters( )
 	palette.Colors[6] = DirectX::XMFLOAT4(0.71f, 0.62f, 0.57f, 1.0f);
 	palette.numColors = 7;
 	mDitheringFilter->SetPaletteInfo(palette);
+	
+	mBrush = std::make_unique<Brush>(mDevice, mImmediateContext, mChrissy->GetTextureSRV());
+	mBrush->SetPattern((LPWSTR)L"Data/Stock/Pattern.png");
+	Brush::SWindowInfo wi;
+	wi.width = mWidth;
+	wi.height = mHeight;
+	mBrush->SetWindowInfo(wi);
 
-	mBefore->SetTexture( mChrissy->GetTextureSRV( ) );
-	//mAfter->SetTexture( mDitheringFilter->GetTextureSRV( ) );
+	mAfter->SetTexture(mBrush->GetTextureSRV());
 }
 
 LRESULT Scene::WndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
@@ -238,9 +240,22 @@ LRESULT Scene::WndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
 		if (mSceneInstance)
 		{
 			UINT X = LOWORD(lParam);
-			UINT Y = LOWORD(lParam);
+			UINT Y = HIWORD(lParam);
+
 			mSceneInstance->mInput->SetCursorPosition(X, Y);
-			DX::OutputVDebugString(L"Cursor position: (%d, %d)\n", X, Y);
+		}
+		break;
+	case WM_SIZE:
+		if (mSceneInstance)
+		{
+			UINT width = LOWORD(lParam);
+			UINT height = HIWORD(lParam);
+			mSceneInstance->mWidth = width;
+			mSceneInstance->mHeight = height;
+			Brush::SWindowInfo wi;
+			wi.width = width;
+			wi.height = height;
+			mSceneInstance->mBrush->SetWindowInfo(wi);
 		}
 		break;
 	case WM_QUIT:
@@ -288,13 +303,43 @@ void Scene::EnableBackbuffer( )
 
 void Scene::Update( )
 {
-	mTimer.Frame( );
-	mInput->Frame( );
-	float frameTime = mTimer.GetFrameTime( );
+	static Brush::SCursorInfo cursorInfo;
+	static float brushRadius = 16;
 
-	//mDitheringFilter->Apply( mChrissy->GetTextureSRV( ) );
+	mTimer.Frame();
+	mInput->Frame();
+	float frameTime = mTimer.GetFrameTime();
 
-#if DEBUG || _DEBUG
+	if (mInput->isKeyPressed(DIK_ADD))
+	{
+		brushRadius++;
+		if (brushRadius >= 72.f)
+			brushRadius = 72.f;
+	}
+	if (mInput->isKeyPressed(DIK_SUBTRACT))
+	{
+		brushRadius--;
+		if (brushRadius <= 1)
+			brushRadius = 1;
+	}
+
+	cursorInfo.thickness = .5f;
+	cursorInfo.radius = brushRadius;
+	cursorInfo.cursorX = mInput->GetCursorX();
+	cursorInfo.cursorY = mInput->GetCursorY();
+
+	mBrush->SetCursorInfo(cursorInfo);
+
+	if (mInput->isLeftKeyPressed())
+	{
+		mBrush->Action(mChrissy->GetTextureSRV());
+	}
+	else
+	{
+		mBrush->Hover(mChrissy->GetTextureSRV());
+	}
+
+ #if DEBUG || _DEBUG
 	frameTime = 1.f / 60.f;
 #endif
 
@@ -313,8 +358,7 @@ void Scene::Render( )
 	EnableBackbuffer( );
 	mImmediateContext->ClearRenderTargetView( mBackbuffer.Get( ), BackColor );
 
-	mBefore->Render( mOrthoMatrix );
-	//mAfter->Render( mOrthoMatrix );
+	mAfter->Render( mOrthoMatrix );
 
 
 #if DEBUG || _DEBUG

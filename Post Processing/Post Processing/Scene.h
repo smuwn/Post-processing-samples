@@ -9,6 +9,7 @@
 #include "Square.h"
 #include "GrayScale.h"
 #include "Dithering.h"
+#include "Brush.h"
 
 ALIGN16 class Scene
 {
@@ -28,8 +29,9 @@ private:
 	std::unique_ptr<GrayScale> mGrayScaleFilter;
 	std::unique_ptr<Dithering> mDitheringFilter;
 
-	std::unique_ptr<Square> mBefore;
 	std::unique_ptr<Square> mAfter;
+
+	std::unique_ptr<Brush> mBrush;
 
 	std::shared_ptr<CInput> mInput;
 	std::shared_ptr<C2DShader> m2DShader;

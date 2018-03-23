@@ -27,6 +27,13 @@ public:
 	{
 		return mTextureSRV.Get( );
 	}
+	ID3D11UnorderedAccessView* GetTextureUAV() const
+	{
+		if (!mHasUAV)
+			throw std::exception("Can't get a UAV from a texture that doesn't have one");
+		return mTextureUAV.Get();
+		
+	}
 	void SetTexture( ID3D11ShaderResourceView * newSRV )
 	{
 		mTextureSRV.Reset( );

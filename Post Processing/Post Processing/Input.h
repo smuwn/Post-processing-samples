@@ -21,6 +21,8 @@ class CInput sealed
 	BYTE m_currentKeyboard[ 256 ];
 	BYTE m_lastKeyboard[ 256 ];
 	std::vector<BYTE> m_vecSpecialKeys;
+	UINT m_cursorX;
+	UINT m_cursorY;
 public:
 	CInput( );
 	CInput( CInput const& ) = delete;
@@ -36,6 +38,11 @@ public: // Try not to use these in runtime
 	bool addSpecialKey( BYTE key );
 	bool removeSpecialKey( BYTE key );
 public:
+	void SetCursorPosition(UINT CursorX, UINT CursorY)
+	{
+		m_cursorX = CursorX;
+		m_cursorY = CursorY;
+	}
 	float GetHorizontalMouseMove( )
 	{
 		return ( float ) m_currentMouseState.lX;

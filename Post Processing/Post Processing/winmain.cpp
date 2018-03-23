@@ -4,14 +4,15 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPWSTR lpCmdLine, int iShow )
 {
 	srand( ( unsigned int ) time( NULL ) );
-	Scene* SC = new Scene( hInstance,
+	Scene::Create(
+		hInstance,
 #if DEBUG || _DEBUG
 		false
 #else
 		true
 #endif
 		);
-	SC->Run( );
-	delete SC;
+	Scene::GetSceneInstance()->Run();
+	Scene::Destroy();
 	return 0;
 }

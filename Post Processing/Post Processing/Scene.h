@@ -43,15 +43,23 @@ private:
 
 	DirectX::XMMATRIX mOrthoMatrix;
 
-
 private: // D3D objects
 	Microsoft::WRL::ComPtr<ID3D11Device> mDevice;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> mImmediateContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mBackbuffer;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
-public:
+
+private:
+	static Scene * mSceneInstance;
+private:
 	Scene( HINSTANCE Instance, bool bFullscreen = false );
+	Scene(Scene const& rhs) = delete;
+	const Scene& operator = (const Scene& rhs) = delete;
 	~Scene( );
+public:
+	static void Create(HINSTANCE instance, bool bFullscreen = false);
+	static Scene* GetSceneInstance();
+	static void Destroy();
 public:
 	void Run( );
 private:

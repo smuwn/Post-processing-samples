@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-
+Scene * Scene::mSceneInstance = nullptr;
 
 Scene::Scene( HINSTANCE Instance, bool bFullscreen ) :
 	mInstance( Instance )
@@ -31,6 +31,21 @@ Scene::~Scene( )
 	DestroyWindow( mWindow );
 }
 
+void Scene::Create(HINSTANCE instance, bool bFullscreen)
+{
+	if (mSceneInstance == nullptr)
+		mSceneInstance = new Scene(instance, bFullscreen);
+}
+
+Scene* Scene::GetSceneInstance()
+{
+	return mSceneInstance;
+}
+
+void Scene::Destroy()
+{
+	delete mSceneInstance;
+}
 
 void Scene::InitWindow( bool bFullscreen )
 {
@@ -219,6 +234,15 @@ LRESULT Scene::WndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
 {
 	switch ( Message )
 	{
+	case WM_MOUSEMOVE:
+		if (mSceneInstance)
+		{
+			UINT X = LOWORD(lParam);
+			UINT Y = LOWORD(lParam);
+			mSceneInstance->mInput->SetCursorPosition(X, Y);
+			DX::OutputVDebugString(L"Cursor position: (%d, %d)\n", X, Y);
+		}
+		break;
 	case WM_QUIT:
 		DestroyWindow( hWnd );
 		break;

@@ -10,6 +10,7 @@
 #include "GrayScale.h"
 #include "Dithering.h"
 #include "Brush.h"
+#include "CopyImage.h"
 
 ALIGN16 class Scene
 {

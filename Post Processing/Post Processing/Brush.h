@@ -5,8 +5,9 @@
 #include "commonincludes.h"
 #include "Filter.h"
 #include "Texture.h"
+#include "CopyImage.h"
 
-class Brush : public Filter 
+class Brush : public Filter
 {
 public:
 	struct SWindowInfo
@@ -38,7 +39,7 @@ public:
 	void Apply(ID3D11ShaderResourceView *)			override;
 
 	void Hover(ID3D11ShaderResourceView *);
-	void Action(ID3D11ShaderResourceView *);
+	void Action(ID3D11ShaderResourceView *, ID3D11UnorderedAccessView *);
 private:
 	MicrosoftPointer(ID3D11ComputeShader) mHoverComputeShader;
 	MicrosoftPointer(ID3DBlob) mHoverComputeShaderBlob;

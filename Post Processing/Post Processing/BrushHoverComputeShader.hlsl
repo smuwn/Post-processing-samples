@@ -6,6 +6,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
 {
 	float width, height;
 	ObjTexture.GetDimensions(width, height);
+	width -= 1;
+	height -= 1;
 	float2 uv = float2(float(DTid.x) / width, float(DTid.y) / height);
 
 	float d;
@@ -23,7 +25,5 @@ void main( uint3 DTid : SV_DispatchThreadID )
 			color = float4(1.0f - color.x, 1.0f - color.y, 1.0f - color.z, 1.0f);
 		}
 	}
-
 	ObjResult[DTid.xy] = color;
-
 }

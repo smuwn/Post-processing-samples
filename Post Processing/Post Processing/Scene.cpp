@@ -175,6 +175,7 @@ void Scene::InitD3D( bool bFullscreen )
 	mInput = std::make_shared<CInput>( );
 	mInput->Initialize( mInstance, mWindow );
 	DX::InitializeStates( mDevice.Get( ) );
+	CCopyImage::CreateInstance(mDevice, mImmediateContext);
 	mImmediateContext->RSSetState( DX::NoCulling.Get( ) );
 	mImmediateContext->RSSetViewports( 1, &mFullscreenViewport );
 }
@@ -190,7 +191,7 @@ void Scene::Init2D( )
 		( LPWSTR ) L"Data/32OpenSans.fnt" );
 	
 	mChrissy = std::make_unique<CTexture>(
-		(LPWSTR)L"Data/Stock/Chrissy.jpg",
+		(LPWSTR)L"Data/Stock/SnowImage.jpg",
 		mDevice.Get(), mImmediateContext.Get(),
 		true
 		);
@@ -332,11 +333,13 @@ void Scene::Update( )
 
 	if (mInput->isLeftKeyPressed())
 	{
-		mBrush->Action(mChrissy->GetTextureSRV());
+		mBrush->Action(mChrissy->GetTextureSRV(), mChrissy->GetTextureUAV());
+		mAfter->SetTexture(mChrissy->GetTextureSRV());
 	}
 	else
 	{
 		mBrush->Hover(mChrissy->GetTextureSRV());
+		mAfter->SetTexture(mBrush->GetTextureSRV());
 	}
 
  #if DEBUG || _DEBUG

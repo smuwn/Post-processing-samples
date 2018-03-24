@@ -30,7 +30,7 @@ void Brush::CreateShader()
 void Brush::InitializeGroupSize()
 {
 	mGroupThreadsX = (int)ceil((float)mTextureDesc.Width / 32.f);
-	mGroupThreadsY = (int)ceil((float)mTextureDesc.Width / 32.f);
+	mGroupThreadsY = (int)ceil((float)mTextureDesc.Height / 32.f);
 	mGroupThreadsZ = 1;
 }
 
@@ -88,7 +88,7 @@ void Brush::Hover(ID3D11ShaderResourceView * SRV)
 	mContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 }
 
-void Brush::Action(ID3D11ShaderResourceView * SRV)
+void Brush::Action(ID3D11ShaderResourceView * SRV, ID3D11UnorderedAccessView * UAV)
 {
 	mContext->CSSetShader(mActionComputeShader.Get(), nullptr, 0);
 	mContext->CSSetSamplers(0, 1, DX::LinearWrapSampler.GetAddressOf());
@@ -107,4 +107,10 @@ void Brush::Action(ID3D11ShaderResourceView * SRV)
 	mContext->CSSetShader(nullptr, nullptr, 0);
 	ID3D11UnorderedAccessView * nullUAV[] = { nullptr };
 	mContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
+
+	ID3D11Resource * inputTexture;
+	SRV->GetResource(&inputTexture);
+
+	mContext->CopySubresourceRegion(inputTexture, 0, 0, 0, 0,
+		mTexture.Get(), 0, NULL);
 }

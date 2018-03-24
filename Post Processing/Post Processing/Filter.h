@@ -12,7 +12,7 @@ protected:
 	virtual void CreateShader() = 0;
 	virtual void InitializeGroupSize() = 0;
 	virtual void CreateAdditional();
-public:
+protected:
 	void Create(MicrosoftPointer(ID3D11Device) Device, MicrosoftPointer(ID3D11DeviceContext) Context,
 		ID3D11ShaderResourceView * SRV);
 public:

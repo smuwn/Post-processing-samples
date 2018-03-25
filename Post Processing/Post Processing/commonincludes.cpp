@@ -5,6 +5,8 @@ namespace DX
 	MicrosoftPointer( ID3D11RasterizerState ) NoCulling;
 	MicrosoftPointer( ID3D11SamplerState ) LinearWrapSampler;
 	MicrosoftPointer(ID3D11SamplerState) LinearClampSampler;
+	MicrosoftPointer(ID3D11SamplerState) PointWrapSampler;
+	MicrosoftPointer(ID3D11SamplerState) PointClampSampler;
 	void InitializeStates( ID3D11Device * device )
 	{
 
@@ -22,9 +24,13 @@ namespace DX
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		sampDesc.MipLODBias = 0;
 		ThrowIfFailed( device->CreateSamplerState( &sampDesc, &LinearWrapSampler ) );
+		sampDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT;
+		ThrowIfFailed(device->CreateSamplerState(&sampDesc, &PointWrapSampler));
 		sampDesc.AddressU =
 			sampDesc.AddressV =
 			sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP;
 		ThrowIfFailed(device->CreateSamplerState(&sampDesc, &LinearClampSampler ));
+		sampDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT;
+		ThrowIfFailed(device->CreateSamplerState(&sampDesc, &PointClampSampler));
 	}
 }

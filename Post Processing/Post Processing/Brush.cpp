@@ -88,11 +88,11 @@ void Brush::Hover(ID3D11ShaderResourceView * SRV)
 	mContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 }
 
-void Brush::Action(ID3D11ShaderResourceView * SRV, ID3D11UnorderedAccessView * UAV)
+void Brush::Action(ID3D11ShaderResourceView * inputTextureSRV, ID3D11UnorderedAccessView * UAV)
 {
 	mContext->CSSetShader(mActionComputeShader.Get(), nullptr, 0);
-	mContext->CSSetSamplers(0, 1, DX::LinearWrapSampler.GetAddressOf());
-	mContext->CSSetShaderResources(0, 1, &SRV);
+	mContext->CSSetSamplers(0, 1, DX::PointWrapSampler.GetAddressOf());
+	mContext->CSSetShaderResources(0, 1, &inputTextureSRV);
 	ID3D11ShaderResourceView * brushPatternSRV = mBrushPattern->GetTextureSRV();
 	mContext->CSSetShaderResources(1, 1, &brushPatternSRV);
 	mContext->CSSetUnorderedAccessViews(0, 1, mTextureUAV.GetAddressOf(), nullptr);
@@ -109,7 +109,7 @@ void Brush::Action(ID3D11ShaderResourceView * SRV, ID3D11UnorderedAccessView * U
 	mContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
 	ID3D11Resource * inputTexture;
-	SRV->GetResource(&inputTexture);
+	inputTextureSRV->GetResource(&inputTexture);
 
 	mContext->CopySubresourceRegion(inputTexture, 0, 0, 0, 0,
 		mTexture.Get(), 0, NULL);

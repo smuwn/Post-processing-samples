@@ -106,6 +106,8 @@ namespace DX
 	extern MicrosoftPointer( ID3D11RasterizerState ) NoCulling;
 	extern MicrosoftPointer( ID3D11SamplerState ) LinearWrapSampler;
 	extern MicrosoftPointer(ID3D11SamplerState) LinearClampSampler;
+	extern MicrosoftPointer(ID3D11SamplerState) PointWrapSampler;
+	extern MicrosoftPointer(ID3D11SamplerState) PointClampSampler;
 	template <class type>
 	inline void Max( unsigned int count, ... )
 	{

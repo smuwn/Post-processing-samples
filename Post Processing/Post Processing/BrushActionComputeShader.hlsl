@@ -15,7 +15,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
 	float2 cursorPosition = float2(gCursorPosition.x, gCursorPosition.y);
 	d = distance(currentPixel, cursorPosition);
 
-	float4 color = ObjTexture.SampleLevel(ObjWrapSampler, uv, 0);
+	//float4 color = ObjTexture.SampleLevel(ObjWrapSampler, uv, 0);
+	float4 color = ObjTexture.Load(DTid.xyz);
 	if (d <= radius)
 	{
 		float4 patternColor = GetPatternColor(currentPixel, d);
